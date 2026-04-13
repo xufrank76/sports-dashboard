@@ -1,0 +1,25 @@
+{
+  "name": "sports-dashboard",
+  "version": "1.0.0",
+  "description": "Athena Blue Jays sports dashboard",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xufrank76/sports-dashboard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xufrank76/sports-dashboard/issues"
+  },
+  "homepage": "https://github.com/xufrank76/sports-dashboard#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^4.3.6"
+  }
+}

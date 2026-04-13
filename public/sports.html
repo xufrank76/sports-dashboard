@@ -1,0 +1,35 @@
+<div id="app"></div>
+
+<script>
+const data = window.openai.toolOutput;
+
+let view = "recent";
+
+function render() {
+  const games = view === "recent" ? data.recentGames : data.upcomingGames;
+
+  document.getElementById("app").innerHTML = `
+    <h2>Toronto Blue Jays</h2>
+
+    <button onclick="setView('recent')">Recent</button>
+    <button onclick="setView('upcoming')">Upcoming</button>
+
+    <ul>
+      ${games.map(g => `
+        <li>
+          ${g.strHomeTeam} vs ${g.strAwayTeam}
+          <br/>
+          ${g.intHomeScore ?? "-"} : ${g.intAwayScore ?? "-"}
+        </li>
+      `).join("")}
+    </ul>
+  `;
+}
+
+function setView(v) {
+  view = v;
+  render();
+}
+
+render();
+</script>

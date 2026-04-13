@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <h2>Toronto Blue Jays Dashboard</h2>
+
+    <button onclick="setView('recent')">Recent</button>
+    <button onclick="setView('upcoming')">Upcoming</button>
+
+    <div id="games"></div>
+
+    <script>
+      const data = window.openai?.toolOutput || {};
+      let view = "recent";
+
+      function render() {
+        const games =
+          view === "recent" ? data.recentGames || [] : data.upcomingGames || [];
+
+        document.getElementById("games").innerHTML = games
+          .map(
+            (g) => `
+          <div style="border:1px solid #ccc; padding:8px; margin:6px;">
+            <strong>${g.strHomeTeam}</strong> vs <strong>${g.strAwayTeam}</strong><br/>
+            ${g.intHomeScore ?? "-"} : ${g.intAwayScore ?? "-"}<br/>
+            ${g.dateEvent}
+          </div>
+        `
+          )
+          .join("");
+      }
+
+      function setView(v) {
+        view = v;
+        render();
+      }
+
+      render();
+    </script>
+  </body>
+</html>
