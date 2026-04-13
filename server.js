@@ -21,7 +21,9 @@ function createSportsServer() {
           uri: "ui://widget/sports.html",
           mimeType: "text/html+skybridge",
           text: widgetHtml,
-          _meta: { "openai/widgetPrefersBorder": true }
+          _meta: {
+            "openai/widgetPrefersBorder": true
+          }
         }
       ]
     })
@@ -52,13 +54,19 @@ function createSportsServer() {
 
       return {
         content: [
-          { type: "text", text: "Loaded Toronto Blue Jays dashboard." }
+          {
+            type: "text",
+            text: "Loaded Toronto Blue Jays dashboard."
+          }
         ],
         structuredContent: {
           team: "Toronto Blue Jays",
           teamId: "135265",
           recentGames: recent.results || [],
           upcomingGames: upcoming.events || []
+        },
+        _meta: {
+          "openai/outputTemplate": "ui://widget/sports.html"
         }
       };
     }

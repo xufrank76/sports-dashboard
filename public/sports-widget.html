@@ -1,38 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Toronto Blue Jays Dashboard</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+      }
+
+      .card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 16px;
+        background: white;
+      }
+
+      h2 {
+        margin-top: 0;
+      }
+
+      .controls {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      button {
+        border: 1px solid #ccc;
+        background: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      button.active {
+        background: #134A8E;
+        color: white;
+        border-color: #134A8E;
+      }
+
+      .game {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        background: #fff;
+      }
+
+      .teams {
+        font-weight: bold;
+        margin-bottom: 6px;
+      }
+
+      .score {
+        font-size: 18px;
+        margin-bottom: 4px;
+      }
+
+      .meta {
+        color: #666;
+        font-size: 14px;
+      }
+    </style>
+  </head>
   <body>
-    <h2>Toronto Blue Jays Dashboard</h2>
+    <div class="card">
+      <h2>Toronto Blue Jays Dashboard</h2>
 
-    <button onclick="setView('recent')">Recent</button>
-    <button onclick="setView('upcoming')">Upcoming</button>
+      <div class="controls">
+        <button id="recentBtn" class="active" type="button">Recent</button>
+        <button id="upcomingBtn" type="button">Upcoming</button>
+      </div>
 
-    <div id="games"></div>
+      <div id="games"></div>
+    </div>
 
     <script>
       const data = window.openai?.toolOutput || {};
       let view = "recent";
 
+      const recentBtn = document.getElementById("recentBtn");
+      const upcomingBtn = document.getElementById("upcomingBtn");
+      const gamesEl = document.getElementById("games");
+
       function render() {
         const games =
-          view === "recent" ? data.recentGames || [] : data.upcomingGames || [];
+          view === "recent"
+            ? (data.recentGames || [])
+            : (data.upcomingGames || []);
 
-        document.getElementById("games").innerHTML = games
+        recentBtn.classList.toggle("active", view === "recent");
+        upcomingBtn.classList.toggle("active", view === "upcoming");
+
+        if (!games.length) {
+          gamesEl.innerHTML = `<p>No games available.</p>`;
+          return;
+        }
+
+        gamesEl.innerHTML = games
           .map(
             (g) => `
-          <div style="border:1px solid #ccc; padding:8px; margin:6px;">
-            <strong>${g.strHomeTeam}</strong> vs <strong>${g.strAwayTeam}</strong><br/>
-            ${g.intHomeScore ?? "-"} : ${g.intAwayScore ?? "-"}<br/>
-            ${g.dateEvent}
-          </div>
-        `
+              <div class="game">
+                <div class="teams">${g.strHomeTeam} vs ${g.strAwayTeam}</div>
+                <div class="score">${g.intHomeScore ?? "-"} : ${g.intAwayScore ?? "-"}</div>
+                <div class="meta">${g.dateEvent} • ${g.strVenue || ""}</div>
+              </div>
+            `
           )
           .join("");
       }
 
-      function setView(v) {
-        view = v;
+      recentBtn.addEventListener("click", () => {
+        view = "recent";
         render();
-      }
+      });
+
+      upcomingBtn.addEventListener("click", () => {
+        view = "upcoming";
+        render();
+      });
 
       render();
     </script>
